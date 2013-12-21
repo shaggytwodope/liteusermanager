@@ -1,0 +1,11 @@
+[Desktop Entry]
+Categories=Settings;
+Encoding=UTF-8
+Exec=liteusermanager
+Icon=liteusermanager
+StartupNotify=true
+Terminal=false
+Type=Application
+Name=User Manager
+Comment=Manage Users on Linux Lite
+GenericName=User Manager
