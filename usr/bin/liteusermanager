@@ -77,7 +77,9 @@ seek help on the Linux Lite Site if your not sure.
 """)
 
 
-abouttext = _('<b>Linux Lite User Manager</b> is a simple front-end for'
+abouttext = _('<b>Linux Lite User Manager Version 1.0-01062014.</b>\n'
+                ' \n'
+		'<b>Linux Lite User Manager</b> is a simple front-end for'
                 ' user password and group management. It is'
                 ' designed to work with <b>Linux Lite</b>, but should'
                 ' work on most other linux systems.\n'
@@ -89,7 +91,7 @@ abouttext = _('<b>Linux Lite User Manager</b> is a simple front-end for'
                 '       Johnathan "ShaggyTwoDope" Jenkins\n'
                 '       Jerry Bezencon'
                 ' \n'
-                '       <a href=\"http://www.linuxliteos.com\">http://www.linuxliteos.com</a>'
+                '       <a href=\"https://www.linuxliteos.com\">https://www.linuxliteos.com</a>'
                 ' \n'
                 '\nIt is free software,'
                 ' released under GNU General Public License.')
@@ -345,7 +347,7 @@ class Users(gtk.HBox):
             else:
                 # Normal MD5 password
                 pwcrypt = encryptPW(pw)
-            ccode, op = gui.rootrun("useradd -m -g users -p '%s' %s" %
+            ccode, op = gui.rootrun("useradd --shell=/bin/bash -m -G users,adm,cdrom,dip,plugdev,lpadmin,sambashare -p '%s' %s" %
                     (pwcrypt, user))
             if (ccode != 0):
                 error(_("It was not possible to add  user '%s'."
