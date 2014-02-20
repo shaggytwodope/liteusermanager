@@ -1,5 +1,5 @@
 [Desktop Entry]
-Categories=Settings;
+Categories=Settings;X-XFCE;DesktopSettings;
 Encoding=UTF-8
 Exec=liteusermanager
 Icon=liteusermanager
@@ -9,3 +9,4 @@ Type=Application
 Name=User Manager
 Comment=Manage Users on Linux Lite
 GenericName=User Manager
+X-XfceSettingsName=User Manager
