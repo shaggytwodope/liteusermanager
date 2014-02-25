@@ -46,8 +46,6 @@ to change your password, open a terminal and run
 If you need more advanced user/group management
 take a look at the man pages for 'useradd', 'usermod',
 'userdel', 'groupadd', 'groupmod', 'groupdel', etc.
-There are also tools with graphical front-ends (e.g.
-'kuser' for kde).
 
 Here is a list of common groups and their functions.
 This does not list every possible group name, please
@@ -55,29 +53,29 @@ seek help on the Linux Lite Site if your not sure.
 
     * audio = sound
     * camera = access to cameras.
-    * disk = block devices not affected by other groups such as optical,floppy,storage.
+    * disk = block devices not affected by other groups.
     * floppy = access to floppy drives.
     * kmem = rights to /dev/mem, /dev/port, /dev/kmem
     * log = access to log files in /var/log.
     * lp = printers
     * optical = access to dvd/cd drives.
-    * network = right to use Networkmanager (if you want to use NM-Applet or KNetworkmanager you need to be in this group)
+    * network = right to use Networkmanager
     * power = right to suspend etc
-    * root = root/admin power (security warning: don't add your user to this unless you know what you're doing!)
+    * root = root/admin power. Don't add your user to this.
     * scanner = scanners
     * locate = access to command updatedb
-    * storage = access to external drives (hard drives, flash/jump drives, mp3 players, etc)
-    * thinkpad = for thinkpad users accessing /dev/misc/nvram through e.g. tpb
+    * storage = access to external drives, flash drives, etc.
+    * thinkpad = for thinkpad users accessing /dev/misc/nvram
     * tty = access to serial/USB devices like modems or handhelds
     * users = default users group (recommended)
     * vboxusers = right to use virtualbox
     * video = DRI/3D acceleration
     * vmware = right to execute vmware
-    * wheel = right to use sudo (setup with visudo) (PAM also affects this)
+    * wheel = right to use sudo (setup with visudo)
 """)
 
 
-abouttext = _('<b>Linux Lite User Manager Version 1.0-02202014.</b>\n'
+abouttext = _('<b>Linux Lite User Manager Version 1.0-02252014</b>\n'
                 ' \n'
 		'<b>Linux Lite User Manager</b> is a simple front-end for'
                 ' user password and group management. It is'
@@ -87,14 +85,14 @@ abouttext = _('<b>Linux Lite User Manager Version 1.0-02202014.</b>\n'
                 'This program was originally written for the <b>larch</b> project:\n'
                 '       <a href=\"http://larch.berlios.de\">http://larch.berlios.de</a>\n'
                 ' \n'                
-                'Modified for the <b>Linux Lite</b> Project by:\n'
+                'Modified for <b>Linux Lite</b> by:\n'
                 '       Johnathan "ShaggyTwoDope" Jenkins\n'
                 '       Jerry Bezencon'
                 ' \n'
-                '       <a href=\"https://www.linuxliteos.com\">https://www.linuxliteos.com</a>'
+                '       <a href=\"http://www.linuxliteos.com\">http://www.linuxliteos.com</a>'
                 ' \n'
-                '\nIt is free software,'
-                ' released under GNU General Public License.')
+                '\nThis is free software,'
+                ' released under the <a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL</a>')
 
 
 class Luser(gtk.Window):
@@ -212,12 +210,15 @@ class Luser(gtk.Window):
     def getGroups(self):
         """Return a list of 'normal' groups, i.e. those with ... ?
         """
-        return [g[0] for g in grp.getgrall()]
+        # This is where I would sort the groups since you're building your list.
+        # Lists are always ordered, so we're going to order by name.
+        return sorted([g[0] for g in grp.getgrall()])
 
     def getUserGroups(self, user):
         """Return the list of supplemental groups for the given user.
         """
-        return [gu[0] for gu in grp.getgrall() if user in gu[3]]
+        # Same thing here.
+        return sorted([gu[0] for gu in grp.getgrall() if user in gu[3]])
 
     def getUserInfo(self, user):
         """Return (uid, gid) for the given user.
@@ -251,7 +252,8 @@ class About(gtk.Frame):
         label = gtk.Label()
         label.set_line_wrap(True)
         #label.set_alignment(0.0, 0.5)
-        label.set_markup(abouttext + '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2013   Linux Lite Project')
+        label.set_markup(abouttext + '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2013   <a href=\"http://www.linuxliteos.com/code.html\">Linux Lite Development</a>')
+
         box.pack_start(label)
         self.add(box)
 
@@ -427,7 +429,7 @@ class SelectUser(gtk.Frame):
             return
         i = self.combo.get_active()
         u = self.list[i][0]
-        self.uid.set_text("uid: %5d" % pwd.getpwnam(u)[2])
+        self.uid.set_text("User ID: %5d" % pwd.getpwnam(u)[2])
         gui.changeUser(u)
 
     def select(self, user):
@@ -442,7 +444,7 @@ class SelectUser(gtk.Frame):
 
 
 class CheckList(gtk.ScrolledWindow):
-    def __init__(self, columnwidth=100):
+    def __init__(self, columnwidth=180):
         gtk.ScrolledWindow.__init__(self)
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.set_shadow_type(gtk.SHADOW_IN)
@@ -468,7 +470,7 @@ class CheckList(gtk.ScrolledWindow):
         # create and add gid column
         cellnum = gtk.CellRendererText()
         cellnum.set_property('xalign', 1.0)
-        gidcol = gtk.TreeViewColumn('gid', cellnum, text=3)
+        gidcol = gtk.TreeViewColumn('Group ID', cellnum, text=3)
         self.treeview.append_column(gidcol)
         # place treeview in scrolled window
         self.add(self.treeview)
