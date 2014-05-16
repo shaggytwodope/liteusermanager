@@ -1,7 +1,7 @@
 [Desktop Entry]
-Categories=Settings;X-XFCE;DesktopSettings;
+Categories=XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-PersonalSettings;
 Encoding=UTF-8
-Exec=liteusermanager
+Exec=lite-usermanager
 Icon=liteusermanager
 StartupNotify=true
 Terminal=false

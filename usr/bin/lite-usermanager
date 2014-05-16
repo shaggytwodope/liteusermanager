@@ -75,7 +75,7 @@ seek help on the Linux Lite Site if your not sure.
 """)
 
 
-abouttext = _('<b>Linux Lite User Manager Version 1.0-02252014</b>\n'
+abouttext = _('<b>Linux Lite User Manager Version 1.0-0010</b>\n'
                 ' \n'
 		'<b>Linux Lite User Manager</b> is a simple front-end for'
                 ' user password and group management. It is'
