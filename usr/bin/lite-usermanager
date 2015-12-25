@@ -75,7 +75,7 @@ seek help on the Linux Lite Site if your not sure.
 """)
 
 
-abouttext = _('<b>Linux Lite User Manager Version 1.0-0010</b>\n'
+abouttext = _('<b>Linux Lite User Manager Version 1.0-0020</b>\n'
                 ' \n'
 		'<b>Linux Lite User Manager</b> is a simple front-end for'
                 ' user password and group management. It is'
@@ -555,6 +555,7 @@ def popupNewPassword():
             flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
             buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
                     gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+    self.set_title("Linux Lite User Manager")
     label = gtk.Label(_("Enter new password:"))
     label.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label)
