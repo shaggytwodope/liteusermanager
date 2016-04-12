@@ -463,7 +463,7 @@ class CheckList(gtk.ScrolledWindow):
         self.treeview.set_model(self.liststore)
         # create CellRenderers to render the data
         celltoggle = gtk.CellRendererToggle()
-        # celltoggle.set_property('activatable', True)
+        celltoggle.set_property('activatable', True)
         celltoggle.connect('toggled', self.toggled_cb)
         celltext = gtk.CellRendererText()
         # create the TreeViewColumn to display the groups
