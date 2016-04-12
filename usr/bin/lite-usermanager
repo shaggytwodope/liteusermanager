@@ -481,6 +481,7 @@ class CheckList(gtk.ScrolledWindow):
         cellnum.set_property('xalign', 1.0)
         gidcol = gtk.TreeViewColumn('Group ID', cellnum, text=3)
         self.treeview.append_column(gidcol)
+        gidcol.set_sort_column_id(2)
         # place treeview in scrolled window
         self.add(self.treeview)
 
