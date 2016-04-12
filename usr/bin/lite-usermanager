@@ -43,7 +43,7 @@ def tr(s):
 
 __builtin__._ = tr
 
-helptext = _("""Linux Lite User Manager:
+helptext = ("""Linux Lite User Manager:
 
 This program does not allow a normal user to change
 his password unless he knows the root (administrator)
@@ -82,16 +82,15 @@ seek help on the Linux Lite Site if your not sure.
     * wheel = right to use sudo (setup with visudo)
 """)
 
-abouttext = _(
-    '<b>Linux Lite User Manager Version 1.0-0030</b>\n'
+abouttext = (
+    '<b>Linux Lite User Manager Version 1.0-0040</b>\n'
     ' \n'
     '<b>Linux Lite User Manager</b> is a simple front-end for'
     ' user password and group management. It is'
     ' designed to work with <b>Linux Lite</b>, but should'
     ' work on most other linux systems.\n'
     ' \n'
-    'This program was originally written for the <b>larch</b> project:\n'
-    '       <a href=\"http://larch.berlios.de\">http://larch.berlios.de</a> (domain expired)\n'
+    'This program was originally written for the <b>larch</b> project.\n'
     ' \n'
     'Modified for <b>Linux Lite</b> by:\n'
     '       Johnathan "ShaggyTwoDope" Jenkins\n'
@@ -130,7 +129,7 @@ class Luser(gtk.Window):
         self.notebook.set_current_page(0)
 
     def setup(self):
-        self.currentUser = None
+        self.curuser = None
 
     def mainLoop(self):
         self.show_all()
@@ -166,26 +165,25 @@ class Luser(gtk.Window):
         program. Can also be called by clicking the 'Apply' button.
         If 'force' is not True, a confirmation dialog will pop up.
         """
-        if ((self.currentUser in self.getUsers()) and
-            (self.currentUser != user)):
+        if ((self.curuser in self.getUsers()) and (self.curuser != user)):
 
             nglist = self.users.grouplist.groupsChanged()
-            if (nglist != None):
+            if (nglist is not None):
                 # Changes were requested, popup an apply confirmation dialog
 
                 if force or confirm(("You have specified changes to the"
                                      " group memberships of user '%s'.\n\n"
                                      "Should these be applied?") %
-                                    self.currentUser):
+                                    self.curuser):
 
                     glist = reduce(
                         (lambda a, b: a + ',' + b if a else b), nglist)
                     ccode, op = self.rootrun('usermod -G %s %s' %
-                                             (glist, self.currentUser))
+                                             (glist, self.curuser))
                     if (ccode != 0):
-                        error(_("The group memberships of user '%s'"
-                                " could not be changed. Here is the system"
-                                " message:\n\n %s") % (self.currentUser, op))
+                        error("The group memberships of user '%s'"
+                              " could not be changed. Here is the system"
+                              " message:\n\n %s") % (self.curuser, op)
                         return False
 
         self.enableApply(False)
@@ -202,11 +200,11 @@ class Luser(gtk.Window):
 
     def changeUser(self, user):
         if self.pending(user):
-            self.currentUser = user
+            self.curuser = user
             self.users.displayUser(user)
             self.users.setGroups(user)
         else:
-            self.users.resetUser(self.currentUser)
+            self.users.resetUser(self.curuser)
 
     def getUsers(self):
         """Return a list of 'normal' users, i.e. those with a home
@@ -219,7 +217,7 @@ class Luser(gtk.Window):
     def getGroups(self):
         """Return a list of 'normal' groups, i.e. those with ... ?
         """
-        # This is where I would sort the groups since you're building your list.
+        # This is where I would sort the groups since you're building your list
         # Lists are always ordered, so we're going to order by name.
         return sorted([g[0] for g in grp.getgrall()])
 
@@ -383,21 +381,21 @@ class Users(gtk.HBox):
             # 'Cancelled'
             return
         ccode, op = gui.rootrun("usermod -p '%s' %s" %
-                                (pwcrypt, gui.currentUser))
+                                (pwcrypt, gui.curuser))
         if (ccode != 0):
             error(_("The password for user '%s' could not be changed."
                     " Here is the system message:\n\n %s") %
-                  (gui.currentUser, op))
+                  (gui.curuser, op))
 
     def removeUser(self, widget, data=None):
         if confirm(_("Do you really want to remove user '%s', including"
                      " the home directory, i.e. losing all the data contained"
-                     " therein?") % gui.currentUser):
+                     " therein?") % gui.curuser):
 
-            ccode, op = gui.rootrun('userdel -r %s' % gui.currentUser)
+            ccode, op = gui.rootrun('userdel -r %s' % gui.curuser)
             if (ccode != 0):
                 error(_("User '%s' could not be removed. Here is the system"
-                        " message:\n\n %s") % (gui.currentUser, op))
+                        " message:\n\n %s") % (gui.curuser, op))
 
             else:
                 self.usel.setUsers(runninguser)
@@ -523,7 +521,7 @@ class CheckList(gtk.ScrolledWindow):
         for r in self.liststore:
             if (r[1] and (r[0] != self.gidnm)):
                 nglist.append(r[0])
-        if (gui.getUserGroups(gui.currentUser) != nglist):
+        if (gui.getUserGroups(gui.curuser) != nglist):
             return nglist
         else:
             return None
