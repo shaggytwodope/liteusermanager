@@ -1,7 +1,9 @@
 Lite User Manager
 ===============
 
-Authors - [Jerry Bezencon,](https://github.com/linuxlite/) [John Jenkins](https://github.com/shaggytwodope/)
+##Authors 
+- [Jerry Bezencon,](https://github.com/linuxlite/)
+- [Johnathan "ShaggyTwoDope" Jenkins](https://github.com/shaggytwodope/)
 
 A tool to help you easily manage users and groups on Linux Lite.
 
