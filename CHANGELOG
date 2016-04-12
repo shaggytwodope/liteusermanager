@@ -1,0 +1,6 @@
+Changes for 1.0-0040:
+- Updated copyright year, removed old unneed info.
+- Increased window width to fit in some longer group names.
+- Allow Groups and Groups ID columns to be clickable and display groups in use.
+- General code clean up and maintence.
+
