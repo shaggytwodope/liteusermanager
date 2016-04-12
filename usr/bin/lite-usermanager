@@ -96,10 +96,10 @@ abouttext = (
     '       Johnathan "ShaggyTwoDope" Jenkins\n'
     '       Jerry Bezencon'
     ' \n'
-    '       <a href=\"http://www.linuxliteos.com\">http://www.linuxliteos.com</a>'
+    '       <a href=\"http://www.linuxliteos.com\">www.linuxliteos.com</a>'
     ' \n'
-    '\nThis is free software,'
-    ' released under the <a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL</a>')
+    '\nThis is free software released under,'
+    ' <a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">GPL2 License</a>')
 
 
 class Luser(gtk.Window):
