@@ -1,4 +1,5 @@
 Changes for 1.0-0040:
+- Removed unused imports, __builtin__, sys.
 - Updated copyright year, removed old unneed info.
 - Increased window width to fit in some longer group names.
 - Allow Groups and Groups ID columns to be clickable and display groups in use.
