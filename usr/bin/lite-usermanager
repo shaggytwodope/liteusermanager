@@ -3,27 +3,31 @@
 #
 #  Copyright 2008 Michael Towers <gradgrind[at]online[dot]de>
 #  Copyright 2013 Johnathan Jenkins <twodopeshaggy@gmail.com>
-#  
+#
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation; either version 2 of the License, or
 #  (at your option) any later version.
-#  
+#
 #  This program is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-#  
+#
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
-#  
-#  
-
+#
+#
 
 import gtk
-import os, sys, pwd, grp, crypt, random
+import os
+import sys
+import pwd
+import grp
+import crypt
+import random
 from subprocess import Popen, PIPE, STDOUT
 
 # For running utilities as root:
@@ -31,8 +35,12 @@ import pexpect
 
 # The not yet implemented i18n bit ...
 import __builtin__
+
+
 def tr(s):
     return s
+
+
 __builtin__._ = tr
 
 helptext = _("""Linux Lite User Manager:
@@ -74,33 +82,33 @@ seek help on the Linux Lite Site if your not sure.
     * wheel = right to use sudo (setup with visudo)
 """)
 
-
-abouttext = _('<b>Linux Lite User Manager Version 1.0-0030</b>\n'
-                ' \n'
-		'<b>Linux Lite User Manager</b> is a simple front-end for'
-                ' user password and group management. It is'
-                ' designed to work with <b>Linux Lite</b>, but should'
-                ' work on most other linux systems.\n'
-                ' \n'
-                'This program was originally written for the <b>larch</b> project:\n'
-                '       <a href=\"http://larch.berlios.de\">http://larch.berlios.de</a> (domain expired)\n'
-                ' \n'                
-                'Modified for <b>Linux Lite</b> by:\n'
-                '       Johnathan "ShaggyTwoDope" Jenkins\n'
-                '       Jerry Bezencon'
-                ' \n'
-                '       <a href=\"http://www.linuxliteos.com\">http://www.linuxliteos.com</a>'
-                ' \n'
-                '\nThis is free software,'
-                ' released under the <a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL</a>')
+abouttext = _(
+    '<b>Linux Lite User Manager Version 1.0-0030</b>\n'
+    ' \n'
+    '<b>Linux Lite User Manager</b> is a simple front-end for'
+    ' user password and group management. It is'
+    ' designed to work with <b>Linux Lite</b>, but should'
+    ' work on most other linux systems.\n'
+    ' \n'
+    'This program was originally written for the <b>larch</b> project:\n'
+    '       <a href=\"http://larch.berlios.de\">http://larch.berlios.de</a> (domain expired)\n'
+    ' \n'
+    'Modified for <b>Linux Lite</b> by:\n'
+    '       Johnathan "ShaggyTwoDope" Jenkins\n'
+    '       Jerry Bezencon'
+    ' \n'
+    '       <a href=\"http://www.linuxliteos.com\">http://www.linuxliteos.com</a>'
+    ' \n'
+    '\nThis is free software,'
+    ' released under the <a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL</a>')
 
 
 class Luser(gtk.Window):
     def __init__(self):
         gtk.Window.__init__(self)
-	self.set_title("Linux Lite User Manager")
+        self.set_title("Linux Lite User Manager")
         self.set_icon_from_file(("/usr/share/pixmaps/liteusermanager.png"))
-        self.set_default_size(475,300)
+        self.set_default_size(475, 300)
         self.connect("destroy", self.exit)
         self.set_border_width(3)
         self.password = None
@@ -144,8 +152,8 @@ class Luser(gtk.Window):
         else:
             if not self.password:
                 pw = popupRootPassword()
-                if (pw == None):
-                    return (1, _("You cancelled the operation."))
+                if (pw is None):
+                    return (1, ("You cancelled the operation."))
                 cc, mess = asroot('true', pw)
                 if (cc != 0):
                     return (cc, mess)
@@ -159,20 +167,21 @@ class Luser(gtk.Window):
         If 'force' is not True, a confirmation dialog will pop up.
         """
         if ((self.currentUser in self.getUsers()) and
-                (self.currentUser != user)):
+            (self.currentUser != user)):
 
             nglist = self.users.grouplist.groupsChanged()
             if (nglist != None):
                 # Changes were requested, popup an apply confirmation dialog
 
-                if force or confirm(_("You have specified changes to the"
-                        " group memberships of user '%s'.\n\n"
-                        "Should these be applied?")
-                         % self.currentUser):
+                if force or confirm(("You have specified changes to the"
+                                     " group memberships of user '%s'.\n\n"
+                                     "Should these be applied?") %
+                                    self.currentUser):
 
-                    glist = reduce((lambda a,b: a+','+b if a else b), nglist)
+                    glist = reduce(
+                        (lambda a, b: a + ',' + b if a else b), nglist)
                     ccode, op = self.rootrun('usermod -G %s %s' %
-                            (glist, self.currentUser))
+                                             (glist, self.currentUser))
                     if (ccode != 0):
                         error(_("The group memberships of user '%s'"
                                 " could not be changed. Here is the system"
@@ -199,12 +208,12 @@ class Luser(gtk.Window):
         else:
             self.users.resetUser(self.currentUser)
 
-
     def getUsers(self):
         """Return a list of 'normal' users, i.e. those with a home
         directory in /home and a login shell (ending with 'sh').
         """
-        return [u[0] for u in pwd.getpwall()
+        return [u[0]
+                for u in pwd.getpwall()
                 if (u[5].startswith('/home/') and u[6].endswith('sh'))]
 
     def getGroups(self):
@@ -234,7 +243,7 @@ class Help(gtk.Frame):
         sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.view = gtk.TextView()
         self.view.set_editable(False)
-        #view.set_wrap_mode(gtk.WRAP_WORD)
+        # view.set_wrap_mode(gtk.WRAP_WORD)
         sw.add(self.view)
         self.add(sw)
         self.view.show()
@@ -252,7 +261,9 @@ class About(gtk.Frame):
         label = gtk.Label()
         label.set_line_wrap(True)
         #label.set_alignment(0.0, 0.5)
-        label.set_markup(abouttext + '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2013   <a href=\"http://www.linuxliteos.com/development.html\">Linux Lite Development</a>')
+        label.set_markup(
+            abouttext +
+            '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2013   <a href=\"http://www.linuxliteos.com/development.html\">Linux Lite Development</a>')
 
         box.pack_start(label)
         self.add(box)
@@ -349,12 +360,12 @@ class Users(gtk.HBox):
             else:
                 # Normal MD5 password
                 pwcrypt = encryptPW(pw)
-            ccode, op = gui.rootrun("useradd --shell=/bin/bash -m -G users,adm,cdrom,dip,plugdev,lpadmin,sambashare -p '%s' %s" %
-                    (pwcrypt, user))
+            ccode, op = gui.rootrun(
+                "useradd --shell=/bin/bash -m -G users,adm,cdrom,dip,plugdev,lpadmin,sambashare -p '%s' %s"
+                % (pwcrypt, user))
             if (ccode != 0):
                 error(_("It was not possible to add  user '%s'."
-                        " Here is the system message:\n\n %s") %
-                        (user, op))
+                        " Here is the system message:\n\n %s") % (user, op))
             else:
                 self.usel.setUsers(user)
 
@@ -370,17 +381,16 @@ class Users(gtk.HBox):
             # 'Cancelled'
             return
         ccode, op = gui.rootrun("usermod -p '%s' %s" %
-                (pwcrypt, gui.currentUser))
+                                (pwcrypt, gui.currentUser))
         if (ccode != 0):
             error(_("The password for user '%s' could not be changed."
                     " Here is the system message:\n\n %s") %
-                    (gui.currentUser, op))
+                  (gui.currentUser, op))
 
     def removeUser(self, widget, data=None):
         if confirm(_("Do you really want to remove user '%s', including"
-                " the home directory, i.e. losing all the data contained"
-                " therein?")
-                 % gui.currentUser):
+                     " the home directory, i.e. losing all the data contained"
+                     " therein?") % gui.currentUser):
 
             ccode, op = gui.rootrun('userdel -r %s' % gui.currentUser)
             if (ccode != 0):
@@ -456,7 +466,7 @@ class CheckList(gtk.ScrolledWindow):
         # create CellRenderers to render the data
         celltoggle = gtk.CellRendererToggle()
         #celltoggle.set_property('activatable', True)
-        celltoggle.connect( 'toggled', self.toggled_cb)
+        celltoggle.connect('toggled', self.toggled_cb)
         celltext = gtk.CellRendererText()
         # create the TreeViewColumn to display the groups
         self.tvcolumn = gtk.TreeViewColumn(_("Groups"))
@@ -496,8 +506,8 @@ class CheckList(gtk.ScrolledWindow):
             if (g == self.gidnm):
                 self.liststore.append([g, True, False, gn])
             else:
-                enable = (user != 'root') and (g not in ('root', 'bin',
-                        'daemon', 'sys', 'adm'))
+                enable = (user != 'root') and (
+                    g not in ('root', 'bin', 'daemon', 'sys', 'adm'))
                 self.liststore.append([g, g in usergroups, enable, gn])
 
     def groupsChanged(self):
@@ -518,14 +528,15 @@ class CheckList(gtk.ScrolledWindow):
 
 
 def popupRootPassword():
-    dialog = gtk.Dialog(parent=gui,
-            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                    gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+    dialog = gtk.Dialog(
+        parent=gui,
+        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK,
+                 gtk.RESPONSE_ACCEPT))
     dialog.set_property('title', 'Enter Password')
     label = gtk.Label()
     label.set_markup("To complete this operation you must enter"
-            " the <b>Administrator</b> password:")
+                     " the <b>Administrator</b> password:")
     label.set_line_wrap(True)
     label.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label)
@@ -542,21 +553,24 @@ def popupRootPassword():
     dialog.destroy()
     return val
 
+
 def enterKey_cb(widget, dialog):
     """A callback for the Enter key in dialogs.
     """
     dialog.response(gtk.RESPONSE_ACCEPT)
 
+
 def popupNewPassword():
     """Dialog for entering a new password, which may be empty. Returns
     <None> if cancelled.
     """
-    dialog = gtk.Dialog(parent=gui,
-            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                    gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
-    self.set_title("Linux Lite User Manager")
-    label = gtk.Label(_("Enter new password:"))
+    dialog = gtk.Dialog(
+        parent=gui,
+        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK,
+                 gtk.RESPONSE_ACCEPT))
+    dialog.set_title("Linux Lite User Manager")
+    label = gtk.Label("Enter new password:")
     label.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label)
     label.show()
@@ -564,7 +578,7 @@ def popupNewPassword():
     entry.set_visibility(False)
     dialog.vbox.pack_start(entry)
     entry.show()
-    label2 = gtk.Label(_("Reenter new password:"))
+    label2 = gtk.Label("Reenter new password:")
     label2.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label2)
     label2.show()
@@ -578,28 +592,30 @@ def popupNewPassword():
         if (v == entry2.get_text()):
             val = v
             break
-        error(_("The passwords do not match."))
+        error("The passwords do not match.")
     dialog.destroy()
     return val
+
 
 def popupNewUser():
     """Dialog for entering a new user, complete with password, which may
     be empty. Returns a pair (user, password), or (<None>, <None>) if
     cancelled.
     """
-    dialog = gtk.Dialog(parent=gui,
-            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-            buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT,
-                    gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+    dialog = gtk.Dialog(
+        parent=gui,
+        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+        buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_REJECT, gtk.STOCK_OK,
+                 gtk.RESPONSE_ACCEPT))
     dialog.set_property('title', 'New User')
-    labelu = gtk.Label(_("Enter user ('login') name:"))
+    labelu = gtk.Label("Enter user ('login') name:")
     labelu.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(labelu)
     labelu.show()
     entryu = gtk.Entry(max=20)
     dialog.vbox.pack_start(entryu)
     entryu.show()
-    label = gtk.Label(_("Enter new password:"))
+    label = gtk.Label("Enter new password:")
     label.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label)
     label.show()
@@ -607,7 +623,7 @@ def popupNewUser():
     entry.set_visibility(False)
     dialog.vbox.pack_start(entry)
     entry.show()
-    label2 = gtk.Label(_("Reenter new password:"))
+    label2 = gtk.Label("Reenter new password:")
     label2.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label2)
     label2.show()
@@ -627,29 +643,37 @@ def popupNewUser():
     dialog.destroy()
     return (user, pw)
 
+
 def encryptPW(pw):
     salt = '$1$'
     for i in range(8):
         salt += random.choice("./0123456789abcdefghijklmnopqrstuvwxyz"
-                "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+                              "ABCDEFGHIJKLMNOPQRSTUVWXYZ")
     return crypt.crypt(pw, salt)
 
+
 def error(message):
-    md = gtk.MessageDialog(parent=gui,
-            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-            type=gtk.MESSAGE_ERROR,
-            buttons=gtk.BUTTONS_CLOSE, message_format=message)
+    md = gtk.MessageDialog(
+        parent=gui,
+        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+        type=gtk.MESSAGE_ERROR,
+        buttons=gtk.BUTTONS_CLOSE,
+        message_format=message)
     md.run()
     md.destroy()
 
+
 def confirm(message):
-    md = gtk.MessageDialog(parent=gui,
-            flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-            type=gtk.MESSAGE_QUESTION,
-            buttons=gtk.BUTTONS_YES_NO, message_format=message)
+    md = gtk.MessageDialog(
+        parent=gui,
+        flags=gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+        type=gtk.MESSAGE_QUESTION,
+        buttons=gtk.BUTTONS_YES_NO,
+        message_format=message)
     val = md.run()
     md.destroy()
     return (val == gtk.RESPONSE_YES)
+
 
 def asroot(cmd, pw):
     """Run a command as root, using the given password.
