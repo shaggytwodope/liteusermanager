@@ -121,10 +121,10 @@ class Luser(gtk.Window):
 
     def init(self):
         self.users = Users()
-        self.notebook.append_page(self.users, gtk.Label(_("Users")))
-        #self.notebook.append_page(Configure(), gtk.Label(_("Configure")))
-        self.notebook.append_page(Help(), gtk.Label(_("Help")))
-        self.notebook.append_page(About(), gtk.Label(_("About")))
+        self.notebook.append_page(self.users, gtk.Label("Users"))
+        # self.notebook.append_page(Configure(), gtk.Label("Configure"))
+        self.notebook.append_page(Help(), gtk.Label("Help"))
+        self.notebook.append_page(About(), gtk.Label("About"))
 
         self.notebook.set_current_page(0)
 
