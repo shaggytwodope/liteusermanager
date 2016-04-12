@@ -380,22 +380,20 @@ class Users(gtk.HBox):
         else:
             # 'Cancelled'
             return
-        ccode, op = gui.rootrun("usermod -p '%s' %s" %
-                                (pwcrypt, gui.curuser))
+        ccode, op = gui.rootrun("usermod -p '%s' %s" % (pwcrypt, gui.curuser))
         if (ccode != 0):
-            error(_("The password for user '%s' could not be changed."
-                    " Here is the system message:\n\n %s") %
-                  (gui.curuser, op))
+            error("The password for user '%s' could not be changed."
+                  " Here is the system message:\n\n %s") % (gui.curuser, op)
 
     def removeUser(self, widget, data=None):
-        if confirm(_("Do you really want to remove user '%s', including"
-                     " the home directory, i.e. losing all the data contained"
-                     " therein?") % gui.curuser):
+        if confirm(("Do you really want to remove user '%s', including"
+                    " the home directory, i.e. losing all the data contained"
+                    " therein?") % gui.curuser):
 
             ccode, op = gui.rootrun('userdel -r %s' % gui.curuser)
             if (ccode != 0):
-                error(_("User '%s' could not be removed. Here is the system"
-                        " message:\n\n %s") % (gui.curuser, op))
+                error("User '%s' could not be removed. Here is the system"
+                      " message:\n\n %s") % (gui.curuser, op)
 
             else:
                 self.usel.setUsers(runninguser)
@@ -639,7 +637,7 @@ def popupNewUser():
             pw = v
             user = entryu.get_text()
             break
-        error(_("The passwords do not match."))
+        error("The passwords do not match.")
     dialog.destroy()
     return (user, pw)
 
