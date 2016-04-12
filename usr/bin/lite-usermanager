@@ -260,10 +260,12 @@ class About(gtk.Frame):
         box.set_border_width(10)
         label = gtk.Label()
         label.set_line_wrap(True)
-        #label.set_alignment(0.0, 0.5)
+        # label.set_alignment(0.0, 0.5)
         label.set_markup(
             abouttext +
-            '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2013   <a href=\"http://www.linuxliteos.com/development.html\">Linux Lite Development</a>')
+            '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2013' +
+            '   <a href=\"http://www.linuxliteos.com/development.html\">' +
+            'Linux Lite Development</a>')
 
         box.pack_start(label)
         self.add(box)
@@ -275,7 +277,7 @@ class Configure(gtk.Frame):
         self.set_border_width(10)
         label = gtk.Label()
         label.set_line_wrap(True)
-        label.set_markup(_('<b>Not Yet implemented</b>'))
+        label.set_markup('<b>Not Yet implemented</b>')
         self.add(label)
 
 
@@ -297,17 +299,17 @@ class Users(gtk.HBox):
         leftbox.pack_start(self.usel, False)
 
         #    add user button -> user name + password popup
-        newuser = gtk.Button(_("New user"))
+        newuser = gtk.Button("New user")
         newuser.connect('clicked', self.newUser)
         leftbox.pack_start(newuser, False)
 
         #    change password button -> password popup
-        newpw = gtk.Button(_("Change password"))
+        newpw = gtk.Button("Change password")
         newpw.connect('clicked', self.newPass)
         leftbox.pack_start(newpw, False)
 
         #    remove user button -> are you sure confirmation
-        self.delete = gtk.Button(_("Remove this user"))
+        self.delete = gtk.Button("Remove this user")
         self.delete.connect('clicked', self.removeUser)
         leftbox.pack_start(self.delete, False)
 
@@ -364,8 +366,8 @@ class Users(gtk.HBox):
                 "useradd --shell=/bin/bash -m -G users,adm,cdrom,dip,plugdev,lpadmin,sambashare -p '%s' %s"
                 % (pwcrypt, user))
             if (ccode != 0):
-                error(_("It was not possible to add  user '%s'."
-                        " Here is the system message:\n\n %s") % (user, op))
+                error("It was not possible to add  user '%s'."
+                      " Here is the system message:\n\n %s") % (user, op)
             else:
                 self.usel.setUsers(user)
 
@@ -374,7 +376,7 @@ class Users(gtk.HBox):
         if (pw == ''):
             # Passwordless login
             pwcrypt = ''
-        elif (pw != None):
+        elif (pw is not None):
             # Normal MD5 password
             pwcrypt = encryptPW(pw)
         else:
@@ -403,7 +405,7 @@ class Users(gtk.HBox):
 
 class SelectUser(gtk.Frame):
     def __init__(self):
-        gtk.Frame.__init__(self, _("Select user"))
+        gtk.Frame.__init__(self, "Select user")
         self.combo = gtk.ComboBox()
 
         # Need some space around the combo box. The only way I've found
@@ -465,11 +467,11 @@ class CheckList(gtk.ScrolledWindow):
         self.treeview.set_model(self.liststore)
         # create CellRenderers to render the data
         celltoggle = gtk.CellRendererToggle()
-        #celltoggle.set_property('activatable', True)
+        # celltoggle.set_property('activatable', True)
         celltoggle.connect('toggled', self.toggled_cb)
         celltext = gtk.CellRendererText()
         # create the TreeViewColumn to display the groups
-        self.tvcolumn = gtk.TreeViewColumn(_("Groups"))
+        self.tvcolumn = gtk.TreeViewColumn("Groups")
         self.tvcolumn.pack_start(celltoggle, expand=False)
         self.tvcolumn.add_attribute(celltoggle, 'active', 1)
         self.tvcolumn.add_attribute(celltoggle, 'activatable', 2)
@@ -487,7 +489,7 @@ class CheckList(gtk.ScrolledWindow):
 
     def toggled_cb(self, widget, path, data=None):
         self.liststore[path][1] = not self.liststore[path][1]
-        gui.enableApply(self.groupsChanged() != None)
+        gui.enableApply(self.groupsChanged() is not None)
 
     def setEnabled(self, enable):
         self.treeview.set_sensitive(enable)
