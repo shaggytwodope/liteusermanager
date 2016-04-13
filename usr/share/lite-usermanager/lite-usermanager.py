@@ -253,7 +253,7 @@ class About(gtk.Frame):
             abouttext +
             '\nCopyright (c) 2008   Michael Towers\nCopyright (c) 2016' +
             '   <a href=\"http://www.linuxliteos.com/development.html\">' +
-            'Linux Lite Development</a>')
+            'Linux Lite</a>')
 
         box.pack_start(label)
         self.add(box)
