@@ -88,7 +88,7 @@ abouttext = (
     ' \n'
     '       <a href=\"http://www.linuxliteos.com\">www.linuxliteos.com</a>'
     ' \n'
-    '\nThis is free software released under,'
+    '\nThis is free software released under'
     ' <a href=\"https://www.gnu.org/licenses/gpl-2.0.html\">GPL2 License</a>')
 
 
