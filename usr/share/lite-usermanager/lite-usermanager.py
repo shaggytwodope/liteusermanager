@@ -568,7 +568,7 @@ def popupNewPassword():
     entry.set_visibility(False)
     dialog.vbox.pack_start(entry)
     entry.show()
-    label2 = gtk.Label("Reenter new password:")
+    label2 = gtk.Label("Re-enter new password:")
     label2.set_alignment(0.0, 0.5)
     dialog.vbox.pack_start(label2)
     label2.show()
